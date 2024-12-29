@@ -1,167 +1,136 @@
 month = input("Enter the month: ")
-
-day = int(input("Enter the date: "))
-
+day = int(input("Enter the day: "))
 year = int(input("Enter the year: "))
 
 print()
+dayCode = {1: "Sunday", 2: "Monday", 3: "Tuesday", 4: "Wednesday", 5: "Thursday", 6: "Friday", 7: "Saturday"}
+firstDays = [6, 2, 2, 5, 7, 3, 5, 1, 4, 6, 2, 4]
+monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+monthCode = {"January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June": 6, "July": 7, "August": 8, "September": 9, "October": 10, "November": 11, "December": 12}
+
+def is_leap_year(year):
+    return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
 
 def currentYear():
-  dayCode = {1: "Sunday", 2: "Monday", 3:"Tuesday", 4:"Wednesday", 5:"Thursday", 6:"Friday", 7:"Saturday"} 
+    global month, day, year 
+    firstDayCodePosition = monthCode[month]
+    firstDayCodeActual = firstDays[firstDayCodePosition - 1]
+    remainder = day % 7
+    actualDate = (firstDayCodeActual + (remainder - 1)) % 7
 
-  firstDays = [6, 2, 2, 5, 7, 3, 5, 1, 4, 6, 2, 4]
+    if actualDate == 0:
+        actualDate = 7
 
-  monthCode = {"January":1, "February":2, "March":3, "April":4, "May": 5, "June":6, "July":7, "August":8, "September":9, "October":10, "November":11, "December":12}
+    if day >= 1 and day <= monthLength[firstDayCodePosition - 1]: 
+        print(f"{month} {day}, {year} is a {dayCode[actualDate]}!")
+    else:
+        if is_leap_year(year) and day >= 1 and day <= 29:
+            print(f"{month} {day}, {year} is a {dayCode[actualDate]}!")
+        else:
+            print("Invalid date, please try again.")
 
-  firstDayCodePosition = monthCode[month]
+def previousYears():
+    global month, day, year
 
-  firstDayCodeActual = firstDays[firstDayCodePosition - 1]
+    for i in range(2020, year - 1, -1):
+        if is_leap_year(i + 1): 
+            for j in range(2, len(firstDays)):
+                firstDays[j] -= 2
+            firstDays[0] = abs((firstDays[0] - 1) % 7)
+            if firstDays[0] == 0:
+                firstDays[0] = 7
+            firstDays[1] = abs((firstDays[1] - 1) % 7)
+            if firstDays[1] == 0:
+                firstDays[1] = 7
+        elif is_leap_year(i):  
+            firstDays[0] -= 2
+            firstDays[1] -= 2
+            for j in range(2, len(firstDays)):
+                firstDays[j] = abs((firstDays[j] - 1) % 7)
+                if firstDays[j] == 0:
+                    firstDays[j] = 7
+        else: 
+            for j in range(2, len(firstDays)):
+                firstDays[j] = abs((firstDays[j] - 1) % 7)
+                if firstDays[j] == 0:
+                    firstDays[j] = 7
+            firstDays[0] = abs((firstDays[0] - 1) % 7)
+            if firstDays[0] == 0:
+                firstDays[0] = 7
+            firstDays[1] = abs((firstDays[1] - 1) % 7)
+            if firstDays[1] == 0:
+                firstDays[1] = 7
 
-  remainder = day % 7
+    firstDayCodePosition = monthCode[month]
+    firstDayCodeActual = firstDays[firstDayCodePosition - 1]
+    remainder = day % 7
+    actualDate = (firstDayCodeActual + (remainder - 1)) % 7
 
-  actualDate = (firstDayCodeActual + remainder) - 1
+    if actualDate == 0:
+        actualDate = 7
 
-  if actualDate > 7:
-    actualDate = actualDate % 7
+    if day >= 1 and day <= monthLength[firstDayCodePosition - 1]: 
+        print(f"{month} {day}, {year} is a {dayCode[actualDate]}!")
+    else:
+        if is_leap_year(year) and day >= 1 and day <= 29:
+            print(f"{month} {day}, {year} is a {dayCode[actualDate]}!")
+        else:
+            print("Invalid date, please try again.")
 
-  print(str(month), str(day) + ",", str(year), "is a", dayCode[actualDate] + "!")
+def futureYears():
+    global month, day, year
 
-def currentCenturyFuture():
-  years = []
+    for i in range(2022, year + 1, 1):
+        if is_leap_year(i): 
+            for j in range(2, len(firstDays)):
+                firstDays[j] += 2
+            firstDays[0] = (firstDays[0] + 1) % 7
+            if firstDays[0] == 0:
+                firstDays[0] = 7
+            firstDays[1] = (firstDays[1] + 1) % 7
+            if firstDays[1] == 0:
+                firstDays[1] = 7
+        elif is_leap_year(i - 1):  
+            firstDays[0] += 2
+            firstDays[1] += 2
+            for j in range(2, len(firstDays)):
+                firstDays[j] = (firstDays[j] + 1) % 7
+                if firstDays[j] == 0:
+                    firstDays[j] = 7
+        else: 
+            for j in range(2, len(firstDays)):
+                firstDays[j] = (firstDays[j] + 1) % 7
+                if firstDays[j] == 0:
+                    firstDays[j] = 7
+            firstDays[0] = (firstDays[0] + 1) % 7
+            if firstDays[0] == 0:
+                firstDays[0] = 7
+            firstDays[1] = (firstDays[1] + 1) % 7
+            if firstDays[1] == 0:
+                firstDays[1] = 7
 
-  for i in range(1, year - 2021):
-    years.append(i)
+    firstDayCodePosition = monthCode[month]
+    firstDayCodeActual = firstDays[firstDayCodePosition - 1]
+    remainder = day % 7
+    actualDate = (firstDayCodeActual + (remainder - 1)) % 7
 
-  print(years)
+    if actualDate == 0:
+        actualDate = 7
 
-  dayCode = {1: "Sunday", 2: "Monday", 3:"Tuesday", 4:"Wednesday", 5:"Thursday", 6:"Friday", 7:"Saturday"} 
+    if day >= 1 and day <= monthLength[firstDayCodePosition - 1]: 
+        print(f"{month} {day}, {year} is a {dayCode[actualDate]}!")
+    else:
+        if is_leap_year(year) and day >= 1 and day <= 29:
+            print(f"{month} {day}, {year} is a {dayCode[actualDate]}!")
+        else:
+            print("Invalid date, please try again.")
 
-  firstDays = [6, 2, 2, 5, 7, 3, 5, 1, 4, 6, 2, 4]
-
-  for j in years:
-    for i in range(len(firstDays)):
-      if (2021 + j) % 4 != 0 and year > 2022:
-        firstDays[i] = firstDays[i] + 1
-        if firstDays[i] > 7:
-          firstDays[i] = firstDays[i] % 7
-      if (2021 + j) % 4 == 0:
-        firstDays[i] = firstDays[i] + 2
-        if firstDays[i] > 7:
-          firstDays[i] = firstDays[i] % 7
-
-  print(firstDays)
-    
-
-  monthCode = {"January":1, "February":2, "March":3, "April":4, "May": 5, "June":6, "July":7, "August":8, "September":9, "October":10, "November":11, "December":12}
-
-  firstDayCodePosition = monthCode[month]
-
-  firstDayCodeActual = firstDays[firstDayCodePosition - 1]
-
-  remainder = day % 7
-
-  actualDate = (firstDayCodeActual + remainder) 
-
-  if actualDate > 7:
-    actualDate = actualDate % 7
-
-  print(str(month), str(day) + ",", str(year), "is a", dayCode[actualDate] + "!")
-
-def futureCenturies():
-  years = []
-  centuries = []
-   
-  for i in range(1, year - 2021):
-    years.append(i)
-
-  for i in range(1, year - 2021):
-    if i % 100 == 0:
-      centuries.append(i/100)
-
-  print(years)
-
-  print(centuries)
-
-  dayCode = {1: "Sunday", 2: "Monday", 3:"Tuesday", 4:"Wednesday", 5:"Thursday", 6:"Friday", 7:"Saturday"} 
-
-  firstDays = [6, 2, 2, 5, 7, 3, 5, 1, 4, 6, 2, 4]
-
-  for j in years:
-    for i in range(len(firstDays)):
-      if (2021 + j) % 4 != 0 and j % 100 != 0:
-        firstDays[i] = firstDays[i] + 1
-        if firstDays[i] > 7:
-          firstDays[i] = firstDays[i] % 7
-      if (2021 + j) % 4 == 0 and j % 100 != 0:
-        firstDays[i] = firstDays[i] + 2
-        if firstDays[i] > 7:
-          firstDays[i] = firstDays[i] % 7
-
-      if (2021 + j) % 4 != 0 and j % 100 == 0:
-        for k in centuries:
-          firstDays[i] = firstDays[i] - k
-          if firstDays[i] > 7:
-            firstDays[i] = firstDays[i] % 7
-      if (2021 + j) % 4 == 0 and j % 100 == 0:
-        for k in centuries:
-          firstDays[i] = (firstDays[i] + 1) - k
-          if firstDays[i] > 7:
-            firstDays[i] = firstDays[i] % 7
-
-  print(firstDays)
-    
-
-  monthCode = {"January":1, "February":2, "March":3, "April":4, "May": 5, "June":6, "July":7, "August":8, "September":9, "October":10, "November":11, "December":12}
-
-  firstDayCodePosition = monthCode[month]
-
-  firstDayCodeActual = firstDays[firstDayCodePosition - 1]
-
-  remainder = day % 7
-
-  actualDate = (firstDayCodeActual + remainder) 
-
-  if actualDate > 7:
-    actualDate = actualDate % 7
-
-  print(str(month), str(day) + ",", str(year), "is a", dayCode[actualDate] + "!")
-  
-
-def pastYears():
-  pass
-if year == 2021:
-  currentYear()
-
-if year > 2021 and year < 2121:
-  currentCenturyFuture()
-
-if year > 2121:
-  futureCenturies()
 
 if year < 2021:
-  pastYears()
+    previousYears()
+    
+elif year == 2021:
+    currentYear()
 
-# Error Case 1:
-
-# Sample: December 20, 2021 should be Monday
-
-# Current Algorithm Fix:
-
-# 20 % 7 = 6 ; firstDayCodeActual = 4; 6 + 4 = 10 - 1 = 9 % 7 = 2
-
-# Error Case 2 (every 100 years):
-
-# Sample: July 8 (future)
-
-# 2121 = 1 day off; 2221 = 2 days; 2321 = 3 days; 2421 = 3 days; 2521 = 5 days; 2621 = 6 days; 2721 = 1 day behind
-
-  
-# Logic:
-
-# Sample Input: June 17, 2021
-
-# 17 = date, startDate = Tuesday
-
-# 17 % 7 = 3
-
-# Tuesday = 3; 3 + 3 = 6 - 1 = Thursday
+elif year > 2021:
+    futureYears()
